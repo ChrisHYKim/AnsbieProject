@@ -1,0 +1,11 @@
+---
+- name: 1) [[제어노드]] 전원 끄기
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: 2) 전원 끄기 
+      ansible.posix.at:
+        command: poweroff
+        count: 1
+        units: minutes
+      ignore_errors: true

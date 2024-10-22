@@ -1,0 +1,6 @@
+2024-10-18T13:30:54.753260+00:00 WARNING 'ansible_navigator.image_manager.puller._log_message' Image inspection failed, image assumed to be corrupted or missing
+2024-10-18T13:30:54.753671+00:00 WARNING 'ansible_navigator.image_manager.puller._log_message' stdout: 
+2024-10-18T13:30:54.753712+00:00 WARNING 'ansible_navigator.image_manager.puller._log_message' stderr: time="2024-10-18T22:30:54+09:00" level=error msg="running `/usr/bin/newuidmap 19062 0 1001 1 1 165536 65536`: newuidmap: write to uid_map failed: Operation not permitted\n"
+Error: cannot set up namespace using "/usr/bin/newuidmap": exit status 1
+
+2024-10-18T13:30:54.802287+00:00 ERROR 'ansible_navigator.image_manager.puller._log_message' Execution environment pull failed

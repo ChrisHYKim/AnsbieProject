@@ -1,0 +1,13 @@
+Using /home/ansible/ansible/05_host_group_vars/ansible.cfg as config file
+
+PLAY [0) 인벤토리 변수 테스트] *************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [web1]
+
+TASK [1) 패키지 설치 - mariadb-server] *****************************************
+changed: [web1] => {"changed": true, "msg": "", "rc": 0, "results": ["Installed: mariadb-server-3:10.5.22-1.el9.x86_64", "Installed: mariadb-server-utils-3:10.5.22-1.el9.x86_64", "Installed: mariadb-gssapi-server-3:10.5.22-1.el9.x86_64", "Installed: mariadb-backup-3:10.5.22-1.el9.x86_64"]}
+
+PLAY RECAP *********************************************************************
+web1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

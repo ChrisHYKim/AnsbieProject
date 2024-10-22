@@ -1,0 +1,17 @@
+---
+- name: 0) 사용자 복구
+  hosts: devservers
+  remote_user: devops
+  become: true
+  vars_files:
+    - vars/secret.yml
+  tasks:
+    ##################################################
+    # (1) 사용자 삭제
+    ##################################################
+    - name: 1) 사용자 삭제 
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: absent
+        remove: true
+      loop: "{{ newusers }}"

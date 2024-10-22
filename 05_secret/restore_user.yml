@@ -1,0 +1,13 @@
+---
+- name: 0) 사용자 삭제
+  hosts: webservers
+  become: true
+  remote_user: ansible
+  vars_files:
+    - secret2.yml
+  tasks:
+    - name: 1) user1 사용자 삭제
+      ansible.builtin.user:
+        name: "{{ username }}"
+        state: absent
+        remove: true
