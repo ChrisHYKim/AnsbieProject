@@ -1,27 +1,27 @@
 ---
-- name: 0) 웹 서버 복구
+- name: 0) restore_playbook.yml
   hosts: all
   tasks:
+    # firewalld http service delete
     - name: 1) 방화벽 포트 제거
       ansible.posix.firewalld:
-        service: http
+        service: "{{ansible_local.custom.general.fwsvc }}"
         permanent: true
         immediate: true
         state: disabled
-
-    - name: 2) 서비스 내리기
+    # 2) 웹 서버 다운
+    - name: 2) 웹 서비스 다운
       ansible.builtin.service:
         name: "{{ ansible_local.custom.general.service }}"
-        state: stopped
+        state: "{{ ansible_local.custom.general.state }}"
         enabled: false
-
+    # 3) 파일 제거
     - name: 3) 파일 삭제
       ansible.builtin.file:
         dest: /etc/ansible/facts.d
         state: absent
-
+    # 4) 패키지 제거
     - name: 4) 패키지 삭제
       ansible.builtin.dnf:
-        name:
-          - "{{ ansible_local.custom.general.package }}"
+        name: "{{ ansible_local.custom.general.package }}"
         state: absent

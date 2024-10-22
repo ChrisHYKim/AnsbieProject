@@ -5,13 +5,13 @@
     remote_dir: /etc/ansible/facts.d
     facts_file: custom.fact
   tasks:
-    - name: 원격 폴더 생성
+    - name: 1) 원격 폴더 생성
       ansible.builtin.file:
         state: directory
         recurse: true
         path: "{{ remote_dir }}"
 
-    - name: 펙트 설치 진행
+    - name: 2) 펙트 설치 진행
       ansible.builtin.copy:
         src: "{{ facts_file }}"
         dest: "{{ remote_dir }}"

@@ -4,21 +4,22 @@
   tasks:
     - name: 1) 패키지 설치
       ansible.builtin.yum:
-        name: "{{ ansible_local.custom.general.package }}"
-        state: present
-
-    - name: 2) 서비스 시작
-      ansible.builtin.service:
         name: "{{ item }}"
-        state: started
-        enabled: true
+        state: present
       loop:
-        - httpd
+        - "{{ ansible_local.custom.general.package }}"
+        - firewalld
+    - name: 2) 서비스 시작
+      ansible.builtin.systemd:
+        service: "{{ item }}"
+        state: "{{ ansible_local.custom.general.state }}"
+      loop:
+        - "{{ ansible_local.custom.general.service }}"
         - firewalld
 
-    - name: 3) 방화벽 시작
+    - name: 3) 방화벽 등록
       ansible.posix.firewalld:
-        service: http
+        service: "{{ ansible_local.custom.general.fwsvc }}"
         permanent: true
         immediate: true
         state: enabled
