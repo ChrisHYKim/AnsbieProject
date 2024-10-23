@@ -1,0 +1,54 @@
+---
+- name: 0) 하드웨어 보고서
+  hosts: all
+  become: true
+  gather_facts: true
+  vars:
+    hwreportfile: /root/hwrepost.txt
+  tasks:
+    #################################################
+    # 1) 파일 배포
+    # 2) 파일 작성
+    # 3) 파일 수집
+    #################################################
+    # 1) 파일 배포
+    # * files/hwreport.txt -> /root/hwrepost.txt
+    - name: 1) 파일 배포 - hwreport.txt
+      ansible.builtin.copy:
+        src: files/hwreport.txt
+        dest: /root/hwrepost.txt
+        owner: root
+        group: root
+        mode: '0600'
+    # 2) 파일 작성
+    # INVENTORY_HOSTNAME
+    - name: 2) INVENTORY_HOSTNAME 작성 - {{ inventory_hostname }}
+      ansible.builtin.replace:
+        path: "{{ hwreportfile }}"
+        regexp: 'inventoryhostname'
+        replace: "{{ inventory_hostname }}"
+    # TOTAL_MEM 작성
+    - name: 2) TOTAL_MEM - {{ ansible_memtotal_mb }}
+      ansible.builtin.replace:
+        path: "{{ hwreportfile }}"
+        regexp: 'totalmem'
+        replace: "{{ ansible_memtotal_mb }}"
+    # BIOS 작성
+    - name: 2) BIOS 작성 - {{ ansible_bios_version }}
+      ansible.builtin.replace:
+        path: "{{ hwreportfile }}"
+        regexp: 'biosversion'
+        replace: "{{ ansible_bios_version }}"
+    # SDA SIZE 작성
+    - name: 2) SDA_SIZE 작성 - {{ ansible_devices.sda.size }}
+      ansible.builtin.replace:
+        path: "{{ hwreportfile }}"
+        regexp: 'sdasize'
+        replace: "{{ ansible_devices.sda.size }}"
+
+    # 3) 파일 수집
+    - name: 3) 파일 수집
+      ansible.builtin.fetch:
+        src: "{{ hwreportfile }}"
+        dest: result
+        flat: true
