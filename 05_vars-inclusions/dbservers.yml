@@ -1,0 +1,17 @@
+---
+- name: Play01) DB 서버 설정
+  hosts: dbservers
+  tasks:
+    - name: 1) 변수 포함
+      ansible.builtin.include_vars:
+        file: paths.yml
+
+    - name: 2) DB 디렉토리 생성
+      ansible.builtin.file:
+        path: "{{ dbservers }}"
+        state: directory
+        mode: '0755'
+
+    - name: 3) 디버그 결과 출력
+      ansible.builtin.debug:
+        var: output_db

@@ -1,0 +1,19 @@
+---
+- name: 파일 서버 생성 
+  hosts: fileservers
+  gather_facts: true
+  tasks:
+    - name: 변수 파일
+      ansible.builtin.include_vars:
+        file: paths.yml
+    
+    - name: 원격 폴더 생성
+      ansible.builtin.file:
+        path: {{ paths.filserver }}
+        state: directory
+        mode: '0755'
+      register: result
+
+    - name: 결과 출력
+      ansible.builtin.debug:
+        var:  result

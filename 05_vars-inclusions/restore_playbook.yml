@@ -1,0 +1,15 @@
+---
+- name: Play01) 파일 서버 패키지 복구
+  hosts: fileservers
+  tasks:
+    - name: 1) 변수 포함 패키지 삭제
+      ansible.builtin.dnf:
+        name:
+          - httpd
+        state: absent
+
+    - name: 2) 톰켓 제거
+      ansible.builtin.dnf:
+        name:
+          - tomcat
+        state: absent
