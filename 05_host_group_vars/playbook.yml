@@ -3,7 +3,7 @@
   hosts: all
   tasks:
     # 1) 패키지 설치 - (dnf) package
-    - name: 1) 패키지 설치
+    - name: 1) 패키지 설치 - {{ package }}
       ansible.builtin.dnf:
         name: "{{ package }}"
-        state: present
+        state: latest
