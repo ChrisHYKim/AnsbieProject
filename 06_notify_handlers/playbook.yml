@@ -1,0 +1,49 @@
+---
+- name: 0) DB 서버 설치
+  hosts: databases
+  remote_user: root
+  gather_facts: false
+  vars:
+    db_packages:
+      - mariadb-server
+      - python3-PyMySQL
+    db_services: mariadb
+    restources_url: http://ansible.example.com
+    config_file_url: "{{ restources_url  }}/my.cnf.standard"
+    config_file_dst: /etc/my.cnf
+  tasks:
+    - name: 1) 패키지 설치 - {{ db_packages }}
+      ansible.builtin.dnf:
+        name: "{{ db_packages }}"
+        state: present
+      notify:
+        - 사용자 인증
+
+    - name: 2) 데이터 베이스 서비스 시작
+      ansible.builtin.systemd:
+        name: "{{ db_services }}"
+        state: started
+        enabled: true
+
+    - name: 3) 데이터 구성
+      ansible.builtin.get_url:
+        url: "{{ config_file_url }}"
+        dest: "{{ config_file_dst }}"
+        owner: mysql
+        group: mysql
+        force: true
+      notify:
+        - 서비스 재시작
+
+  handlers:
+    - name: 서비스 재시작
+      ansible.builtin.service:
+        name: "{{ db_service }}"
+        state: restarted
+
+    - name: 사용자 인증
+      community.mysql.mysql_user:
+        name: root
+        password: soldesk1.
+        priv: '*.*:ALL'
+        state: present

@@ -1,0 +1,23 @@
+---
+- name: 0) Facts 설치
+  hosts: web1
+  gather_facts: false
+  vars:
+    remote_dir: /etc/ansible/facts.d
+    facts_files: files/custom.fact
+  tasks:
+    ####################################################
+    # 1) /etc/ansible/facts.d 생성
+    # 2) /etc/ansible/facts.d/custom.fact 파일 배포
+    ####################################################
+    - name: 1) /etc/ansible/facts.d 폴더 생성
+      ansible.builtin.file:
+        path: "{{ remote_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: 2) /etc/ansible/facts.d/custom.fact 파일 배포
+      ansible.builtin.copy:
+        src: "{{ facts_files }}"
+        dest: "{{ remote_dir }}"
+        mode: '0644'

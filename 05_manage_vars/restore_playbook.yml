@@ -1,0 +1,42 @@
+---
+- name: Play01) 변수 복구
+  hosts: lamp
+  gather_facts: false
+  vars_files:
+    - vars/main.yml
+  tasks:
+    #################################################
+    # 1) 방화벽 포트 제거 - http
+    # 2) 서비스 종료  - firewalld,mariadb,httpd
+    # 3) 서비스 설정 삭제 - /var/www/html/index.html
+    # 4) 패키지 삭제 - mariadb-server, httpd
+    #################################################
+    - name: 1) 방화벽 포트 제거
+      ansible.posix.firewalld:
+        service: "{{ fw_port }}"
+        permanent: true
+        immediate: true
+        state: disabled
+
+    - name: 2) 서비스 종료
+      ansible.builtin.systemd:
+        service: "{{ item }}"
+        state: stopped
+        enabled: false
+
+      loop:
+        - "{{ firewall }}"
+        - "{{ db_svc }}"
+        - "{{ web_pkg }}"
+
+    - name: 3) 파일 삭제 진행
+      ansible.builtin.file:
+        dest: "{{ web_root }}/index.html"
+        state: absent
+
+    - name: 4) 패키지 삭제
+      ansible.builtin.dnf:
+        name:
+          - httpd
+          - mariadb-server
+        state: absent

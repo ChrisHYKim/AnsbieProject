@@ -1,0 +1,52 @@
+---
+- name: Play01) 여러가지 변수 테스트
+  hosts: lamp
+  vars:
+    firewall: firewalld
+    fw_port: http
+    fw_state: enabled
+  vars_files:
+    - vars/main.yml
+  tasks:
+    ##################################################
+    # (1) 서버 패키지 설치 - mariadb-server, httpd
+    # (2) 서비스 시작 - mariadb, httpd
+    # (3) 방화벽 패키지 설치
+    # (4) 방화벽 서비스 시작
+    # (5) 방화벽 서비스 포트 활성화
+    # (6) 웹 페이지 생성 - /var/www/html/index.html
+    ##################################################
+    - name: 1) 서비스 패키지 및 시작
+      # include_task
+      ansible.builtin.include_tasks:
+        file: tasks/main.yml
+
+    - name: 2) 방화벽 패키지 설치
+      ansible.builtin.dnf:
+        name:
+          - "{{ firewall }}"
+        state: present
+
+    - name: 3) 방화벽 서비스 시작
+      # var firewall
+      ansible.builtin.systemd:
+        name: "{{ firewall }}"
+        state: started
+        enabled: true
+
+    - name: 4) 방화벽 포트 등록
+      ansible.posix.firewalld:
+        service: "{{ fw_port }}"
+        permanent: true
+        immediate: true
+        state: "{{ fw_state }}"
+
+    - name: 5) 웹 페이지 생성
+      ansible.builtin.copy:
+        content: |
+          <pre>
+            Hostname: {{ ansible_fqdn }}
+            IP: {{ ansible_default_ipv4.address }}
+          </pre>
+        dest: "{{ web_root }}/index.html"
+        mode: '0644'

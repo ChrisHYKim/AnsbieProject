@@ -1,0 +1,7 @@
+---
+web_root: /var/www/html
+fw_port: http
+fw_state: enabled
+db_svc: mariadb
+web_pkg: httpd
+firewall: firewalld

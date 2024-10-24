@@ -1,6 +1,17 @@
+# install_package.yml
 ---
-# Task
+# Tasks
 - name: 패키지 설치
   ansible.builtin.dnf:
     name: "{{ package.web_pkg }}"
+    state: present
+
+- name: 패키지 설치
+  ansible.builtin.dnf:
+    name: "{{ package.epel_pkg }}"
+    state: present
+
+- name: 패키지 설치
+  ansible.builtin.dnf:
+    name: "{{ package.box_pkg }}"
     state: present

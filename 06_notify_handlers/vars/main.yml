@@ -1,0 +1,7 @@
+db_packages:
+  - mariadb-server
+  - python3-pyMySQL
+db_services: mariadb
+resources_url: http://ansible.example.com
+config_file_url: "{{ resources_url }}/my.cnf.standard"
+config_file_dst: /etc/my.cnf

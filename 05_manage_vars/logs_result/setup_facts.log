@@ -1,0 +1,13 @@
+Using /home/ansible/ansible/05_manage_vars/ansible.cfg as config file
+
+PLAY [0) Facts 설치] ***********************************************************
+
+TASK [1) /etc/ansible/facts.d 폴더 생성] ***************************************
+changed: [web1] => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"}, "changed": true, "gid": 0, "group": "root", "mode": "0755", "owner": "root", "path": "/etc/ansible/facts.d", "secontext": "unconfined_u:object_r:etc_t:s0", "size": 6, "state": "directory", "uid": 0}
+
+TASK [2) /etc/ansible/facts.d/custom.fact 파일 배포] ***************************
+changed: [web1] => {"changed": true, "checksum": "f441279225b5138156f283cf67be927d03f1c7b5", "dest": "/etc/ansible/facts.d/custom.fact", "gid": 0, "group": "root", "md5sum": "05915da3ac4105b0388712e2e007c1c4", "mode": "0644", "owner": "root", "secontext": "system_u:object_r:etc_t:s0", "size": 112, "src": "/home/ansible/.ansible/tmp/ansible-tmp-1729775901.4097922-6222-129940369031781/source", "state": "file", "uid": 0}
+
+PLAY RECAP *********************************************************************
+web1                       : ok=2    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

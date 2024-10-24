@@ -1,4 +1,9 @@
 ---
 # Variable
 package:
-  web_pkg: httpd
+  web_pkg: 
+    - httpd
+  epel_pkg: 
+    - epel-release
+  box_pkg:
+    - boxes

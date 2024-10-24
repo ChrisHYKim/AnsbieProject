@@ -1,0 +1,13 @@
+Using /home/ansible/ansible/05_manage_vars/ansible.cfg as config file
+
+PLAY [Play01) 변수 복구] *******************************************************
+
+TASK [1) 방화벽 포트 제거] *****************************************************
+changed: [web1] => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"}, "changed": true, "msg": "Permanent and Non-Permanent(immediate) operation, Changed service http to disabled"}
+
+TASK [2) 서비스 종료] **********************************************************
+fatal: [web1]: FAILED! => {"msg": "'firewall' is undefined. 'firewall' is undefined"}
+
+PLAY RECAP *********************************************************************
+web1                       : ok=1    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+

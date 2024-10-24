@@ -1,18 +1,22 @@
 ---
-- name: Play 01) EPEL 패키지 설치
+- name: Play01) 전체 서버 설치
   hosts: all
-  gather_facts: false
   tasks:
-    - name: 1) epel-release 패키지 설치
+    - name: 1) 변수 포함 패키지 지정
+      ansible.builtin.include_vars:
+        file: package.yml
+
+    - name: 2) 패키지 설치 - {{ package.epel_pkg }}
       ansible.builtin.include_tasks:
         file: install_package.yml
       vars:
         packages:
           epel_pkg: epel-release
 
-    - name: 2) boxes 패키지 설치
+    - name: 3) 패키지 설치 - {{ package.box_pkg }}
       ansible.builtin.include_tasks:
         file: install_package.yml
+
       vars:
         packages:
           box_pkg: boxes
