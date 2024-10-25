@@ -1,0 +1,10 @@
+---
+- name: 0) SELinux 변경
+  hosts: all
+  gather_facts: false
+  tasks:
+    # 1) SELinux Mode (permissive -> encoforcing)
+    - name: 1) SELinux 상태 변경
+      ansible.posix.selinux:
+        policy: targeted
+        state: enforcing

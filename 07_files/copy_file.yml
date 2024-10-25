@@ -1,0 +1,11 @@
+---
+- name: 0) 모듈 테스트 - copy
+  hosts: all
+  tasks:
+    - name: 복사 파일 설정
+      ansible.builtin.copy:
+        src: files/users.txt
+        dest: '/home/devops/users.txt'
+        owner: devops
+        group: devops
+        mode: '0644'

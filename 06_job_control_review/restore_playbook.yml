@@ -1,0 +1,50 @@
+---
+- name: 0) 작업 제어 복구
+  hosts: webservers
+  gather_facts: true
+  vars_files:
+    - vars/vars.yml
+  tasks:
+    # 0) Check loacl time
+    - name: 0) 점검, (1) 메모리 점검 (2) 배포판 종류 점검
+      ansible.builtin.fail:
+        msg: "메모리가 256M 보다 작거나 CentOS가 아닙니다."
+      when: >
+        ansible_memtotal_mb < min_ram_mb or
+        ansible_distribution != 'CentOS'
+
+    - name: 0) 다른 점검, (3) 배포판 버전 점검
+      ansible.builtin.debug:
+        msg: "CentOS Stream9 상태 체크"
+      failed_when: ansible_distribution_version != "9"
+
+    - name: 1) 방화벽 포트 제거
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        immediate: true
+        state: disabled
+      loop: "{{ firewall_rule }}"
+
+    - name: 2) 서비스 중지
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: stopped
+        enabled: false
+      loop: "{{ services }}"
+
+    - name: Block ~ Rescue
+      block:
+        - name: 3) 웹 서버 설정 파일 삭제
+          ansible.builtin.file:
+            path: "{{ item.dest }}"
+            state: absent
+          loop: "{{ web_config_files }}"
+      rescue:
+        - name: 3) 웹 서버 설정 - 에러 메시지 출력
+          ansible.builtin.debug:
+            msg: "[FAIL] 웹 서버 파일을 삭제하지 못햇습니다."
+    - name: 2) 패키지 제거
+      ansible.builtin.dnf:
+        name: "{{ web_service }}"
+        state: absent
