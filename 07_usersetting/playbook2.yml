@@ -1,0 +1,20 @@
+---
+- name: 0) 사용자 추가
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: 1) 환경 설정 - ~/.bashrc 설정
+      ansible.builtin.template:
+        src: templates/bashrc.j2
+        dest: /home/devops/.bashrc
+        owner: devops
+        group: devops
+        mode: '0644'
+
+    - name: 2) 환경 설정 2 - ble.sh
+      ansible.builtin.copy:
+        src: files/blesh/ble.sh
+        dest: /home/devops/.local/share/
+        owner: devops
+        group: devops
+        mode: '0644'

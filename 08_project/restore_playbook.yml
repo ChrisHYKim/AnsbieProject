@@ -1,0 +1,24 @@
+---
+- name: 0) 웹 서버 복구
+  hosts: all
+  tasks:
+    - name: 1) 웹 페이지 서비스 중지 및 삭제
+      ansible.builtin.import_tasks:
+        file: restore_web.yml
+      vars:
+        packages:
+          - httpd
+          - mod_ssl
+        service: httpd
+        files:
+          - /var/www/html/index.html
+      ignore_errors: true
+
+    - name: 2) 방화벽 서비스 중지 및 포트 제거
+      ansible.builtin.include_tasks:
+        file: restore_fw.yml
+      vars:
+        service: firewalld
+        rules:
+          - http
+          - https

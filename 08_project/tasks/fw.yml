@@ -1,0 +1,20 @@
+---
+# Firewall Task File
+- name: 방화벽 패키지 설치 - {{ fw_package }}
+  ansible.builtin.dnf:
+    name: "{{ fw_package }}"
+    state: present
+
+- name: 방화벽 서비스 - {{ service }}
+  ansible.builtin.systemd:
+    name: "{{ service }}"
+    enabled: true
+    state: started
+
+- name: 방화벽 포트 등록 - {{ rules }}
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop: "{{ rules }}"
