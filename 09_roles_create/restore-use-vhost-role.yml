@@ -1,0 +1,26 @@
+---
+###############################################
+# 목적: 웹 서버 초기화
+# 1) (debug) 시작 메시지 출력
+# 2) (include_roles) 가상 호스트 웹 서버 설정
+# * (failed_when) 플랫폼 점검 & 버전 점검
+# * 방화벽 포트 제거
+# * 웹 서비스 중지
+# * 웹 서버 설정 삭제
+# * 웹 페키지 설치
+###############################################
+- name: 0) [웹 서버 복구]
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: 1) 시작 메시지 출력
+      ansible.builtin.debug:
+        msg: "웹 서버 복구시작"
+
+    - name: 2) 웹 서버 복구
+      ansible.builtin.include_role:
+        name: myremovevhost
+
+    - name: 3) 종료 메시지 출력
+      ansible.builtin.debug:
+        msg: "웹 서버 종료"

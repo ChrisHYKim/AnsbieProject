@@ -1,0 +1,34 @@
+---
+#############################################
+# 목적: 웹 서버 설정 - Virtual Hosting
+# 1) (debug) 시작 메시지 출력
+# 2) (include_roles) 가상 호스트 웹 서버 설정
+# * (failed_when) 플랫폼 점검 & 버전 점검
+# * 웹 페키지 설치
+# * 웹 서비스 시작
+# * 웹 서버 설정
+#   - /etc/httpd/conf.d/vhost.conf
+#   - /var/www/vhosts/{{ansbile.hosts}}
+#   - notify
+# * 방화벽에 포트 등록
+# * >>>> dependencies => firewall role <<<<
+# 4) (copy) 소스 디렉토리안에 소스 코드 보내기
+#    - /var/www/vshosts/ansible1.example.com
+# * files/html/*  -- copy -> /var/www/vhosts/ansible_hostname
+# 5) (debug) 끝 메시지 출력
+#############################################
+- name: 0) [웹 서버 설정]
+  hosts: webservers
+  gather_facts: true
+  tasks:
+    - name: 1) 시작 메시지 출력
+      ansible.builtin.debug:
+        msg: "웹 서버 출력"
+
+    - name: 2) 웹 서버 역할
+      ansible.builtin.include_role:
+        name: myvhost
+
+    - name: 3) 웹서버 종료 메시지
+      ansible.builtin.debug:
+        msg: "웹 서버 설정"

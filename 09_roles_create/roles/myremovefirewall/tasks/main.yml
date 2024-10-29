@@ -1,0 +1,9 @@
+---
+# tasks file for myremovefirewall
+- name: 방화벽 포트 제거
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: disabled
+  loop: "{{ web_rules }}"

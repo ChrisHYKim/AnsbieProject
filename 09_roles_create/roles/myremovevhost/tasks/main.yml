@@ -1,0 +1,37 @@
+---
+# tasks file for myremovevhost
+#############################################
+# * (failed_when) 플랫폼 점검 & 버전 점검
+# * (firewalld) 방화벽 포트 제거
+# * (systemd) 웹 서비스 중지
+# * (file) 웹 서버 설정 삭제
+# - /etc/httpd/conf.d/vhost.conf
+# - /var/www/vhosts/{{ansible_hostname}}
+#############################################
+- name: 배포판 및 버전 확인
+  ansible.builtin.debug:
+    msg: "[점검] Centos 9 버전에서만 동작합니다."
+  failed_when: >
+    ansible_distribution != "CentOS" or
+    ansible_distribution_version != "9"
+
+- name: 웹 서버스 중지
+  ansible.builtin.systemd:
+    name: httpd
+    enabled: false
+    state: stopped
+
+- name: 가상 호스트 삭제
+  ansible.builtin.file:
+    dest: /etc/httpd/conf.d/vhost.conf
+    state: absent
+
+- name: 웹 소스코드 삭제
+  ansible.builtin.file:
+    dest: "/var/www/vhosts/{{ ansible_hostname }}"
+    state: absent
+
+- name: 패키지 삭제 - {{ web_packages }}
+  ansible.builtin.dnf:
+    name: "{{ web_packages }}"
+    state: absent

@@ -1,0 +1,5 @@
+---
+# vars file for myremovevhost
+web_packages:
+  - httpd
+  - mod_ssl
