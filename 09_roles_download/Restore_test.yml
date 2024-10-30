@@ -1,0 +1,7 @@
+---
+- name: Restore test.yml
+  hosts: all
+  tasks:
+    - name: 1) rollbacksvc2 구성 작업
+      ansible.builtin.include_role:
+        name: rollbacksvc2
