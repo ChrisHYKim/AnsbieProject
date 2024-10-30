@@ -1,0 +1,23 @@
+---
+###############################################
+# 목적: 웹 서버 초기화
+# 1) (debug) 시작 메시지 출력
+# 2) (include_roles) 가상 호스트 웹 서버 설정
+# * (failed_when) 플랫폼 점검 & 버전 점검
+# * 방화벽 포트 제거
+# * 웹 서비스 중지
+# * 웹 서버 설정 삭제
+# - /var/www/html/index.html
+# - /etc/httpd/conf.d/vhost.conf
+# - /var/www/vhosts/
+# * 웹 페키지 삭제
+###############################################
+- name: 0) 웹 서버 설정 복구
+  hosts: all
+  gather_facts: false
+  # roles:
+  #   - role: rollbacksvc
+  tasks:
+    - name: 1) rollbacksvc 구성
+      ansible.builtin.include_role:
+        name: rollbacksvc
